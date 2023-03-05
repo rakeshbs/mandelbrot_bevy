@@ -55,7 +55,7 @@ fn update_material(
 ) {
     for (material_handle, mut transform) in query.iter_mut() {
         let mut material = materials.get_mut(material_handle).unwrap();
-        let inc = (1. / 10000.0) * 2.;
+        let inc = (1. / 10000.0) * 5.;
         if keyboard_input.pressed(KeyCode::A) {
             material.c.x += inc;
         }
@@ -69,10 +69,10 @@ fn update_material(
             material.c.y -= inc;
         }
         if keyboard_input.pressed(KeyCode::Z) {
-            material.zoom += inc * 10.;
+            material.zoom += inc * 100.;
         }
         if keyboard_input.pressed(KeyCode::X) {
-            material.zoom -= inc * 10.;
+            material.zoom -= inc * 100.;
         }
     }
 }
@@ -80,7 +80,7 @@ fn update_material(
 /// You only need to implement functions for features that need non-default behavior. See the Material api docs for details!
 impl Material for CustomMaterial {
     fn fragment_shader() -> ShaderRef {
-        "shaders/custom_material.wgsl".into()
+        "shaders/julia_material.wgsl".into()
     }
 
     fn alpha_mode(&self) -> AlphaMode {
