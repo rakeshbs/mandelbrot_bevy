@@ -7,6 +7,12 @@ var<uniform> material: CustomMaterial;
 @group(1) @binding(1)
 var<uniform> zoom: f32;
 
+fn hsv_to_rgb(c: vec3<f32>) -> vec3<f32> {
+    let K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+    let p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+    return c.z * mix(K.xxx, clamp(p - K.xxx, vec3(0.0), vec3(1.0)), c.y);
+}
+
 fn compute_color(z0: vec2<f32>, c: vec2<f32>, iterations: u32, threshold: f32) -> vec2<f32> {
     var z = z0;
     var color = vec2<f32>(0.0, 0.0);
@@ -19,11 +25,10 @@ fn compute_color(z0: vec2<f32>, c: vec2<f32>, iterations: u32, threshold: f32) -
             // The pixel is outside the Julia set, so color it based on the number of iterations
             var t = f32(i) / f32(iterations);
             color.x = color.x + t;
-            color.y = color.y + 1.0 - t;
+            color.y = color.y + t;
             break;
         }
     }
-
     // The pixel is inside the Julia set, so color it black
     return color;
 }
@@ -35,7 +40,7 @@ fn fragment(
     var c = material.c;
     var iterations = 300u; // Number of iterations for the fractal
     var threshold = 4.0; // Threshold for determining divergence
-    var samples = 4; // Number of samples to average over
+    var samples = 2; // Number of samples to average over
     var sum = vec2<f32>(0.0, 0.0); // Accumulator for samples
     var count = 0; // Number of samples accumulated
 
