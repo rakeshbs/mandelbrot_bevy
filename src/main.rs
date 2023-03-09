@@ -56,7 +56,7 @@ fn update_material(
     for (material_handle, mut transform) in query.iter_mut() {
         let mut material = materials.get_mut(material_handle).unwrap();
         let z = material.zoom;
-        let inc = (1. / (z * 10000.0)) * 5.;
+        let inc = (1. / (z * 90000.0)) * 2.;
         if keyboard_input.pressed(KeyCode::A) {
             material.c.x += inc;
         }
@@ -70,10 +70,10 @@ fn update_material(
             material.c.y -= inc;
         }
         if keyboard_input.pressed(KeyCode::Z) {
-            material.zoom += inc * 100.;
+            material.zoom += inc * 10.;
         }
         if keyboard_input.pressed(KeyCode::X) {
-            material.zoom -= inc * 100.;
+            material.zoom -= inc * 10.;
         }
     }
 }
